@@ -65,8 +65,8 @@ Create Table GuessesRetail (
 	LocationID Binary(16) Not Null,
 	Token Binary(16) Not Null,
 	DistPct Float Not Null,
-	Constraint `FK_GuessesRetail_LocationsClassic`
-		Foreign Key (LocationID) References LocationsClassic(Id)
+	Constraint `FK_GuessesRetail_LocationsRetail`
+		Foreign Key (LocationID) References LocationsRetail(Id)
 		On Delete Cascade,
 	Constraint `FK_GuessesRetail_Sessions`
 		Foreign Key (Token) References Sessions(Token)
