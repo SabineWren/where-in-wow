@@ -1,0 +1,12 @@
+# Build Artifacts
+*.css
+*.css.map
+*.map.js
+*.min.js
+*.js
+# Can't quickly port this to TS. It's gonna take some work.
+!game.js
+
+node_modules
+package-lock.json
+
