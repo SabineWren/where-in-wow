@@ -24,9 +24,15 @@ Where ExpansionId <= 2;
 Select MapId, Zone, Hex(LocId), Location, Lat, Lng From Cte_Locations
 Where ExpansionId <= 3;
 
+-- Back end Cata
+Select MapId, Zone, Hex(LocId), Location, Lat, Lng From Cte_Locations
+Where ExpansionId >= 2
+And   ExpansionId <= 4;
+
 -- Back end WoD
 Select MapId, Zone, Hex(LocId), Location, Lat, Lng From Cte_Locations
-Where ExpansionId >= 2 && ExpansionId <= 3;
+Where ExpansionId >= 2
+And   ExpansionId <= 5;
 
 -- Back end BfA
 Select MapId, Zone, Hex(LocId), Location, Lat, Lng From Cte_Locations
