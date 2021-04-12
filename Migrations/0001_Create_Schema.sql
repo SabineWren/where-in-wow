@@ -1,12 +1,14 @@
 Create Table Maps (
 	Id TinyInt Primary Key,
-	Name NVarChar(100) Not Null
+	Name NVarChar(100) Not Null,
+	Constraint `UQ_Maps` Unique (Name)
 );
 
 Create Table Expansions (
 	Id TinyInt Primary Key,
 	MapId TinyInt,
 	Name NVarChar(100) Not Null,
+	Constraint `UQ_Expansions` Unique (Name),
 	Constraint `FK_Expansions_Maps`
 		Foreign Key (MapId) References Maps(Id)
 		On Delete Restrict
@@ -16,6 +18,7 @@ Create Table Zones (
 	Id SmallInt Primary Key Auto_Increment,
 	ExpansionId TinyInt Not Null,
 	Name NVarChar(100) Not Null,
+	Constraint `UQ_Zones` Unique (ExpansionId, Name),
 	Constraint `FK_Zones_Expansions`
 		Foreign Key (ExpansionId) References Expansions(Id)
 		On Delete Restrict
@@ -38,29 +41,7 @@ Create Table Locations (
 		On Delete Restrict
 );
 
-Create Table Sessions (
-	Token Binary(16) Primary key,
-	Location Binary(16) Not Null,
-	ExpansionSelect TinyInt Not Null,
-	Lives TinyInt Not Null,
-	Score Int Not null
-);
-
-Create Table Guesses (
-	LocationID Binary(16) Not Null,
-	Token Binary(16) Not Null,
-	DistPct Float Not Null,
-	Constraint `FK_Guesses_Locations`
-		Foreign Key (LocationID) References Locations(Id)
-		On Delete Cascade,
-	Constraint `FK_Guesses_Sessions`
-		Foreign Key (Token) References Sessions(Token)
-		On Delete Cascade
-);
-
 /*
-Drop Table Guesses;
-Drop Table Sessions;
 Drop Table Locations;
 Drop Table Zones;
 Drop Table Expansions;
