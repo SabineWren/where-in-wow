@@ -1,8 +1,16 @@
 {
 	"editor.insertSpaces": false,
+	"[fsharp]": {
+		"editor.insertSpaces": true },
 	"files.exclude": {
-		"**/*.js": {"when": "$(basename).ts",
+		".ionide": true,
+		"**/*.css": true,
+		"**/*.css.map": true,
+		"**/*.js": { "when": "$(basename).ts" },
 		"**/*.js.map": true,
+		"Back_End/bin": true,
+		"Back_End/obj": true,
+		"Back_End/*.fs": true,
 		"dist": true,
 		"LICENSE": true,
 		"node_modules": true,

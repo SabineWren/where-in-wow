@@ -1,7 +1,7 @@
 export default {
-	input: "js/game.js",
+	input: "Front_End/game.js",
 	output: {
-		file: "index.js",
+		file: "Web_Root/index.js",
 		format: "iife",
 	},
 }

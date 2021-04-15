@@ -9,7 +9,7 @@
 		"@typescript-eslint/parser": "^4.19.0"
 	},
 	"scripts": {
-		"css": "sass css/style.scss css/style.css",
+		"css": "sass Front_End/style.scss Web_Root/style.css",
 		"compile": "tsc --project tsconfig.json",
 		"bundle": "rollup --config rollup.config.js",
 		"watch": "tsc -w --project tsconfig.json"

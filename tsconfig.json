@@ -22,6 +22,6 @@
 		"strictFunctionTypes": true,
 		"target": "esnext",
 	},
-	"include": ["js/**/*", "rollup.config.ts"],
+	"include": ["Front_End/**/*", "rollup.config.ts"],
 	"exclude": ["node_modules"],
 }

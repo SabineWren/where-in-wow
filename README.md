@@ -1,5 +1,5 @@
 ## where-in-wow
-Fork of Where In Warcraft
-https://github.com/Kruithne/where-in-warcraft
+Fork of Kruithne's Where In Warcraft (upstream deleted).
 
 This version will feature an expansion filter.
+
