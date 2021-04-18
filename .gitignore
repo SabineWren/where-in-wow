@@ -1,9 +1,11 @@
 # Build Artifacts
+bin
+obj
 *.css
 *.css.map
-**/*.js.map
-**/*.min.js
-**/*.js
+*.js.map
+*.min.js
+*.js
 # Can't quickly port this to TS. It's gonna take some work.
 !Front_End/game.js
 
@@ -11,12 +13,11 @@
 node_modules
 package-lock.json
 
-Back_End/bin
-Back_End/obj
-
 # Tooling
 .fake
 .ionide
 .vscode/*
 !.vscode/settings.json
 
+# Secret
+dbconfig.json

@@ -4,6 +4,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>WhereInWow.App</AssemblyName>
     <EnableDefaultContentItems>false</EnableDefaultContentItems>
+	 <RunWorkingDirectory>$(MSBuildThisFileDirectory)</RunWorkingDirectory>
   </PropertyGroup>
 
   <ItemGroup>

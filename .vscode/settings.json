@@ -1,20 +1,22 @@
 {
 	"editor.insertSpaces": false,
-	"[fsharp]": {
-		"editor.insertSpaces": true },
+	"[fsharp]": { "editor.insertSpaces": true },
+	"eslint.validate": ["typescript"],
 	"files.exclude": {
-		".ionide": true,
+		"**/bin": true,
+		"**/obj": true,
 		"**/*.css": true,
 		"**/*.css.map": true,
 		"**/*.js": { "when": "$(basename).ts" },
 		"**/*.js.map": true,
-		"Back_End/bin": true,
-		"Back_End/obj": true,
-		"Back_End/*.fs": true,
+		"**/*.fs": true,
+		".ionide": true,
 		"dist": true,
 		"LICENSE": true,
 		"node_modules": true,
 		"package-lock.json": true
-	}
+	},
+	"files.eol": "\n",
+	"files.insertFinalNewline": true,
+	"files.trimTrailingWhitespace": true
 }
-
