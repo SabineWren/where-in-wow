@@ -1,3 +1,5 @@
+import { GetLeaderboard, GuessMap, InitSession, Resume, SubmitScore } from "Http.js"
+
 const documentReady = () => {
 	return new Promise(resolve => {
 		if (document.readyState !== 'loading')
@@ -63,23 +65,6 @@ const $ = (id, multi = false) => {
 	return multi ? document.querySelectorAll(id) : document.querySelector(id);
 };
 
-const sendRequest = async (req) => {
-	const res = await fetch('endpoint.php', {
-		method: 'POST',
-		headers: {
-			'Accept': 'application/json',
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify(req)
-	});
-
-	const json = await res.json();
-	if (json.error)
-		console.error(json.error);
-
-	return json;
-};
-
 const MAPS = {
 	'cata': {
 		dir: 'tiles',
@@ -132,7 +117,7 @@ class GameState {
 		this.isClassic = false;
 		this.gameStarted = false;
 	}
-	
+
 	get isAlive() {
 		return this.playerLives > 0;
 	}
@@ -152,18 +137,10 @@ class GameState {
 		this.isClassic = isClassic;
 		this.reset();
 
-		const initReq = { action: 'init', mode: isClassic ? 2 : 1 };
-
-		if (resumeToken !== null)
-			initReq.resumeToken = resumeToken;
-
-		if (this.token !== null)
-			initReq.clearToken = this.token;
-
 		if (!isRestart)
 			await this.ui.enterGame(isClassic);
 
-		const res = await sendRequest(initReq);
+		const res = await InitSession(isClassic, resumeToken, this.token)
 
 		localStorage.setItem('wiw-session', res.token);
 
@@ -257,11 +234,8 @@ class GameState {
 		let circleColour = 'blue';
 		let circleRadius = GUESS_THRESHOLD;
 
-		const req = { action: 'guess', token: this.token, lat: choice.lat, lng: choice.lng };
-		if (selectedMap !== 'classic')
-			req.mapID = MAPS[selectedMap].mapID;
-
-		const res = await sendRequest(req);
+		const map = selectedMap !== 'classic' ? MAPS[selectedMap].mapID : null
+		const res = await GuessMap(this.token, choice.lat, choice.lng, map)
 		const currentLocation = { lat: res.lat, lng: res.lng };
 
 		switch (res.result) {
@@ -270,11 +244,11 @@ class GameState {
 				this.ui.showMapPath(currentLocation, choice, circleColour);
 				this.ui.setGameGlowBorder('red');
 				break;
-			
+
 			case 1:
 				circleColour = 'yellow';
 				break;
-			
+
 			case 2:
 				circleColour = 'green';
 				circleRadius = BOD_RADIUS;
@@ -319,17 +293,14 @@ class GameState {
 	}
 
 	async sendScore() {
-		let name = this.ui.$fieldSendScore.value.trim();
+		const name = this.ui.$fieldSendScore.value.trim();
 		if (name.length > 0 && this.token !== null && this.playerPoints > 0) {
-			name = name.substring(0, 20);
-
 			let uid = localStorage.getItem('wiw-score-token');
 			if (uid === null) {
 				uid = ([1e7]+1e3+4e3+8e3+1e11).replace(/[018]/g, c => (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16));
 				localStorage.setItem('wiw-score-token', uid);
 			}
-
-			await sendRequest({ action: 'submit', token: this.token, name, uid });
+			await SubmitScore(this.token, name, uid)
 			this.ui.$buttonSubmitScore.textContent = 'Score Sent';
 			this.ui.$buttonSubmitScore.classList.add('disabled');
 			this.ui.hideSendScore();
@@ -460,15 +431,15 @@ class UI {
 				this.throttleLeaderboard = true;
 				this.$leaderboard.innerHTML = '<p>Loading...</p>';
 
-				const res = await sendRequest({ action: 'leaderboard', mode: this.isClassic ? 2 : 1 });
+				const players = await GetLeaderboard(this.isClassic);
 				this.$leaderboard.innerHTML = '';
 				let index = 1;
-				for (const player of res.players) {
+				for (const player of players) {
 					const node = document.createElement('div');
-					node.textContent = (index++) + '. ' + player.name;
+					node.textContent = (index++) + '. ' + player.Name;
 
 					const span = document.createElement('span');
-					span.textContent = player.score + ' (' + Math.round(player.accuracy) + '%)';
+					span.textContent = player.Score + ' (' + Math.round(player.Accuracy) + '%)';
 					node.appendChild(span);
 
 					this.$leaderboard.appendChild(node);
@@ -537,7 +508,7 @@ class UI {
 			[pointB.lat, pointB.lng]
 		], { color: colour || 'red' }).addTo(this.map);
 	}
-	
+
 	showMapCircle(location, colour, radius) {
 		if (this.mapCircle)
 			this.mapCircle.remove();
@@ -590,7 +561,7 @@ class UI {
 		// Bring the map to the front and fade it in.
 		this.$gameMap.style.opacity = 1;
 		this.$gameMap.style.zIndex = 4;
-		
+
 		// Fade out the panorama frame.
 		this.$gameImage.style.opacity = 0;
 	}
@@ -820,7 +791,7 @@ class GamepadHandler {
 						this.lastClickTime = ts;
 					}
 				}
-	
+
 				if (gamepad.buttons[0].pressed) {
 					if (this.ui.$buttonNextRound.style.display !== 'none') {
 						this.state.nextRound();
@@ -880,10 +851,9 @@ class Panorama {
 
 	async setLocation(id) {
 		// Load the panorama for this location.
-		const dir = this.isClassic ? 'locations_classic' : 'locations';
 		this.ui.$gameCanvas.style.opacity = 0;
 		await delay(430);
-		loadBackgroundSmooth(this.ui.$gameCanvas, 'images/' + dir + '/' + id + '.jpg');
+		loadBackgroundSmooth(this.ui.$gameCanvas, `images/Locations/${id}.jpg`);
 	}
 
 	_init() {
@@ -950,7 +920,7 @@ class Panorama {
 
 	const lastSession = localStorage.getItem('wiw-session');
 	if (lastSession !== null) {
-		sendRequest({ action: 'resume', token: lastSession }).then(res => {
+		Resume(lastSession).then(res => {
 			if (res.resume === true) {
 				const $continue = $('#front-text-continue');
 				$continue.style.display = 'block';

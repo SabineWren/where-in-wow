@@ -23,12 +23,13 @@
 		"no-restricted-globals": ["error",
 			{ "name": "name", "message": "You probably don't mean window.name. Undeclared variable?" },
 		],
+		"no-undef": "off",
 		"no-unexpected-multiline": "off",
 		"no-unused-vars": "off",
 		"@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
 		"semi": ["error", "never"],
 		"semi-spacing": "warn",
-		"spaced-comment": ["error", "always"],
+		"spaced-comment": "off",//["error", "always"],
 		"import/extensions": ["warn", { "js": "always" }],
 	}
 }

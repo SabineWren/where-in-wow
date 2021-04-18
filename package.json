@@ -1,17 +1,19 @@
 {
 	"devDependencies": {
+		"@rollup/plugin-node-resolve": "^11.2.1",
+		"@typescript-eslint/eslint-plugin": "^4.21.0",
+		"@typescript-eslint/parser": "^4.19.0",
 		"eslint": "^7.23.0",
 		"eslint-plugin-import": "^2.22.1",
 		"rollup": "^2.42.4",
 		"sass": "^1.32.8",
-		"typescript": "^4.2.3",
-		"@typescript-eslint/eslint-plugin": "^4.21.0",
-		"@typescript-eslint/parser": "^4.19.0"
+		"typescript": "^4.2.3"
 	},
 	"scripts": {
 		"css": "sass Front_End/style.scss Web_Root/style.css",
 		"compile": "tsc --project tsconfig.json",
+		"compilew": "tsc -w --project tsconfig.json",
 		"bundle": "rollup --config rollup.config.js",
-		"watch": "tsc -w --project tsconfig.json"
+		"bundlew": "rollup -w --config rollup.config.js"
 	}
 }

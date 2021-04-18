@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Giraffe" Version="5.0.0-rc-6" />
+    <PackageReference Include="Microsoft.FSharpLu.Json" Version="0.11.6" />
     <PackageReference Include="Ply" Version="0.3.*" />
   </ItemGroup>
 
