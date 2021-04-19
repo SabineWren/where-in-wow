@@ -1,4 +1,3 @@
-//This module wraps Dapper functions with curryable calls and exception catching
 module internal WhereInWow.Db
 open Dapper
 open FSharp.Control.Tasks
