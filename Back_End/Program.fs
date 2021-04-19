@@ -21,7 +21,10 @@ let webApp =
    choose [
       GET >=> choose [
          route "/" >=> htmlFile "index.html"
-         route "/hello" >=> HttpHandlers.GetHello
+         route "/init" >=> HttpHandlers.Init//temp for dev testing
+      ]
+      POST >=> choose [
+         route "/init" >=> HttpHandlers.Init
       ]
       setStatusCode 404 >=> text "Not Found" ]
 
@@ -64,6 +67,8 @@ let configureLogging (builder: ILoggingBuilder) =
 
 [<EntryPoint>]
 let main args =
+   Environment.InitEnvironmentVariables()
+   //System.Console.WriteLine()
    Host.CreateDefaultBuilder(args)
       .ConfigureWebHostDefaults(
          fun webHostBuilder ->

@@ -17,7 +17,7 @@ export const GuessMap = function(token: string, lat: number, lng: number, mapId:
 	return Promise.resolve(res)
 }
 
-export const InitSession = function(_isClassic: boolean, _resume: string | null, _clear: string | null) {
+export const InitSession = async function(_isClassic: boolean, _resume: string | null, _clear: string | null) {
 	/*const init = { action: "init", mode: isClassic ? 2 : 1 }
 	if (!resume && !clear) {
 		return sendRequest(init)
@@ -28,7 +28,8 @@ export const InitSession = function(_isClassic: boolean, _resume: string | null,
 		const initReq = { clearToken: clear, ...init }
 		return sendRequest(initReq)
 	}*/
-	return Promise.resolve({ token: "", location: "0a1ff6c62b9ed75520bc3e509718e8da" })
+	const location = await postNoPayload<LocationMeta>("/init")
+	return { token: "", location: location.LocId }
 }
 
 export const Resume = (lastSession: string) =>
@@ -48,8 +49,18 @@ const sendRequest = async (req) => {
 	})
 
 	const json = await res.json()
-	if (json.error)
-		console.error(json.error)
+	if (json.error) { console.error(json.error) }
 
 	return json
+}
+
+const postNoPayload = async function<T>(route: string) {
+	const init: RequestInit = {
+		method: "POST",
+		headers: { Accept: "application/json" },
+	}
+	const res = await fetch(route, init)
+	const json = await res.json()
+	if (json.error) { console.error(json.error) }
+	return json as T
 }
