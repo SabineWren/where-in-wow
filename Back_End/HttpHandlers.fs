@@ -25,15 +25,12 @@ let Init =
       task {
          let! location = GetRandomLocation 1uy
          match location with
-         | Ok v ->
-            System.Console.WriteLine(v)
-            return! json v next ctx
+         | Ok v -> return! json v next ctx
          | Error e ->
             let msg =
                match e with
                | EmptyResult -> "No database row(s) retrieved."
                | NoRowAffected -> "No database row(s) affected."
-               | SqlExcept ex -> ex.Message
                | Validation m -> m
             ctx.SetStatusCode 500
             return! ctx.WriteTextAsync msg

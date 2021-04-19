@@ -3,7 +3,6 @@ namespace WhereInWow.Models
 type WiwError =
    | EmptyResult
    | NoRowAffected
-   | SqlExcept of System.Data.Common.DbException
    | Validation of string
 
 type Expansion =

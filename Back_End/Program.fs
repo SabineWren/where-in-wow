@@ -68,7 +68,6 @@ let configureLogging (builder: ILoggingBuilder) =
 [<EntryPoint>]
 let main args =
    Environment.InitEnvironmentVariables()
-   //System.Console.WriteLine()
    Host.CreateDefaultBuilder(args)
       .ConfigureWebHostDefaults(
          fun webHostBuilder ->
